@@ -42,7 +42,7 @@ class App extends React.Component {
       todos: newTodos,
       valueInput:'',
     })
-
+    localStorage.setItem('listodo',JSON.stringify(this.state.todos))
   }
 
   handleRemoveClick = (id, e) => {
@@ -50,16 +50,20 @@ class App extends React.Component {
    this.setState({
      todos: todoDel,
    })
+   localStorage.setItem('listodo',JSON.stringify(this.state.todos))
   }
 
   handleUpdateClick = (value,e) => {
     e.preventDefault()
+    // const element = document.getElementById('update')
+    // element.id = 'active'
    const index = this.state.todos.find(item => item.valueItem === value)
    this.setState({
     valueUpdate: value,
     indexUpdate: index.id
   })
-   console.log('index kia: ', index.id)
+  localStorage.setItem('listodo',JSON.stringify(this.state.todos))
+  //  console.log('index kia: ', index.id)
   }
 
   handleUpdateChange = (e) => {
@@ -87,6 +91,14 @@ class App extends React.Component {
     })
   }
 
+  componentDidMount = () => {
+    const list = localStorage.getItem('listodo')
+    const newlist = JSON.parse(list)
+    this.setState({
+      todos: newlist
+    })
+  }
+
   render() {
     // console.log('valueInput: ', this.state.valueInput)
     // console.log('valueItem: ', this.state.Item.valueItem)
@@ -105,14 +117,15 @@ class App extends React.Component {
             <button className='update' onClick = {(e) => this.handleUpdateClick(item.valueItem, e)}>update</button>
           </div> 
         )}
-
-        <div className='panel-update'>
+        {this.state.valueUpdate && (
+          <div id = 'update'className='panel-update'>
           <input value={this.state.valueUpdate} onChange={(e) => this.handleUpdateChange(e)}></input>
           <div className='btn-update'>
             <button onClick={(e) => this.clickUpdate(this.state.indexUpdate,e) }>Update</button>
             <button>Cancel</button>
           </div>
         </div>
+        )}
       </div>
     )
   }
