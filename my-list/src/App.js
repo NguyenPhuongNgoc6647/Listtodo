@@ -1,5 +1,5 @@
-import React, { useImperativeHandle } from 'react';
-import './App.css';
+import React, { useImperativeHandle } from 'react'
+import './App.css'
 import ListTodos from './ListTodos'
 import EditTodoForm from './EditTodoForm'
 
@@ -28,7 +28,7 @@ class App extends React.Component {
 
   handleBtnClick = (e) => {
     e.preventDefault()
-    if(this.state.valueInput){
+    if (this.state.valueInput) {
       const newTodo = {
         id: new Date().getTime(),
         valueItem: this.state.valueInput
@@ -47,21 +47,23 @@ class App extends React.Component {
   }
 
   handleRemoveClick = (id, e) => {
-    const todoDel = this.state.todos.filter(item => item.id !== id)
+    const {todos} = this.state
+    const todoDel = todos.filter(item => item.id !== id)
     this.setState({
       todos: todoDel,
     })
-    localStorage.setItem('listodo', JSON.stringify(this.state.todos))
+    localStorage.setItem('listodo', JSON.stringify(todos))
   }
 
   handleUpdateClick = (value, e) => {
+    const {todos} = this.state
     e.preventDefault()
-    const index = this.state.todos.find(item => item.valueItem === value)
+    const index = todos.find(item => item.valueItem === value)
     this.setState({
       valueUpdate: value,
       indexUpdate: index.id
     })
-    localStorage.setItem('listodo', JSON.stringify(this.state.todos))
+    localStorage.setItem('listodo', JSON.stringify(todos))
   }
 
   handleUpdateChange = (e) => {
@@ -72,16 +74,17 @@ class App extends React.Component {
   }
 
   clickUpdate = (index, e) => {
+    const { todos, valueUpdate } = this.state
     e.preventDefault()
 
-    this.state.todos.map(item => {
+    todos.map(item => {
       if (item.id === index) {
-        item.valueItem = this.state.valueUpdate
+        item.valueItem = valueUpdate
       }
     })
 
     this.setState({
-      todos: this.state.todos,
+      todos,
       valueUpdate: ''
     })
   }
@@ -95,21 +98,23 @@ class App extends React.Component {
   }
 
   render() {
+    // Sử dụng destructuring
+    const { todos, valueInput, valueUpdate, indexUpdate } = this.state
     return (
       <div className='form-todolist'>
-        <input value={this.state.valueInput} placeholder='todoList...' onChange={(e) => this.handleInputChange(e)}></input>
+        <input value={valueInput} placeholder='todoList...' onChange={(e) => this.handleInputChange(e)}></input>
         <button className='add' onClick={(e) => this.handleBtnClick(e)}>Add</button>
 
-        <ListTodos 
-         isAddTodo={this.state.todos}
-         handleRemove={this.handleRemoveClick} 
-         handleUpdate={this.handleUpdateClick}>
-         </ListTodos>
+        <ListTodos
+          isAddTodo={todos}
+          handleRemove={this.handleRemoveClick}
+          handleUpdate={this.handleUpdateClick}>
+        </ListTodos>
 
-        <EditTodoForm 
-          editUpdate={this.state.valueUpdate}
+        <EditTodoForm
+          editUpdate={valueUpdate}
           handleChangeUpdate={this.handleUpdateChange}
-          editIndex={this.state.indexUpdate}
+          editIndex={indexUpdate}
           btnUpdate={this.clickUpdate} >
         </EditTodoForm>
       </div>
