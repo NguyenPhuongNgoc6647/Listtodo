@@ -7,17 +7,15 @@ class ListTodos extends React.Component {
    }
 
    render() {
-      console.log('isAddTodo: ', this.props.isAddTodo)
       return (
          <div>
-            <div>student</div>
             {this.props.isAddTodo.map(item =>
                <div className='item'>
                   <div className='value' key={item.id}>
                      {item.valueItem}
                   </div>
-                  <button className='delete' onClick={(e) => this.handleRemoveClick(item.id, e)}>delete</button>
-                  <button className='update' onClick={(e) => this.handleUpdateClick(item.valueItem, e)}>update</button>
+                  <button className='delete' onClick={(e) => this.props.handleRemove(item.id, e)}>delete</button>
+                  <button className='update' onClick={(e) => this.props.handleUpdate(item.valueItem, e)}>update</button>
                </div>
             )}
          </div>
