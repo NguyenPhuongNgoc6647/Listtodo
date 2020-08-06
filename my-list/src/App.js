@@ -1,5 +1,6 @@
 import React, { useImperativeHandle } from 'react';
 import './App.css';
+import ListTodos from './ListTodos'
 
 class App extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class App extends React.Component {
       valueInput: '',
       valueUpdate: '',
       indexUpdate: 0,
-      Item: {
+      item: {
         id: new Date().getTime(),
         valueItem: ''
       }
@@ -32,7 +33,7 @@ class App extends React.Component {
     }
     const newTodos = [...this.state.todos, newTodo]
     this.setState({
-      Item: {
+      item: {
         id: new Date().getTime(),
         valueItem: this.state.valueInput
       },
@@ -77,7 +78,6 @@ class App extends React.Component {
       }
     })
 
-    console.log('todos moi: ', this.state.todos)
     this.setState({
       todos: this.state.todos,
       valueUpdate: ''
@@ -93,29 +93,33 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('todos: ', this.state.todos)
     return (
       <div className='form-todolist'>
         <input value={this.state.valueInput} placeholder='todoList...' onChange={(e) => this.handleInputChange(e)}></input>
-        <button className='add' onClick={ (e) => this.handleBtnClick(e) }>Add</button>
-        {this.state.todos.map(item =>
-          <div className='item'>
-            <div className='value' key={item.id}>
-              {item.valueItem}
+        <button className='add' onClick={(e) => this.handleBtnClick(e)}>Add</button>
+
+          {/* {{this.state.todos.map(item =>
+            <div className='item'>
+              <div className='value' key={item.id}>
+                {item.valueItem}
+              </div>
+              <button className='delete' onClick={(e) => this.handleRemoveClick(item.id, e)}>delete</button>
+              <button className='update' onClick={(e) => this.handleUpdateClick(item.valueItem, e)}>update</button>
             </div>
-            <button className='delete' onClick={ (e) => this.handleRemoveClick(item.id, e) }>delete</button>
-            <button className='update' onClick={ (e) => this.handleUpdateClick(item.valueItem, e) }>update</button>
-          </div>
-        )}
-        {this.state.valueUpdate && (
-          <div id='update' className='panel-update'>
-            <input value={this.state.valueUpdate} onChange={ (e) => this.handleUpdateChange(e) }></input>
-            <div className='btn-update'>
-              <button onClick={(e) => this.clickUpdate(this.state.indexUpdate, e)}>Update</button>
-              <button>Cancel</button>
+          )} } */}
+
+        <ListTodos isAddTodo = {this.state.todos}></ListTodos>
+
+        <EditTodoForm isEdit = {this.state.valueInput, this.state.valueUpdate, this.state.indexUpdate} ></EditTodoForm>
+          {this.state.valueUpdate && (
+            <div id='update' className='panel-update'>
+              <input value={this.state.valueUpdate} onChange={(e) => this.handleUpdateChange(e)}></input>
+              <div className='btn-update'>
+                <button onClick={(e) => this.clickUpdate(this.state.indexUpdate, e)}>Update</button>
+                <button>Cancel</button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     )
   }
